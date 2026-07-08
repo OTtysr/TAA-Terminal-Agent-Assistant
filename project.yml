@@ -1,0 +1,61 @@
+name: TerminalAgents
+options:
+  bundleIdPrefix: com.terminalagents
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    CODE_SIGN_STYLE: Automatic
+    CODE_SIGN_IDENTITY: "-"
+    ENABLE_HARDENED_RUNTIME: NO
+    DEVELOPMENT_TEAM: ""
+targets:
+  SwiftTerm:
+    type: framework
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: Vendor/SwiftTerm/Sources/SwiftTerm
+        excludes:
+          - "Documentation.docc"
+          - "Mac/README.md"
+          - "Apple/Metal/Shaders.metal"
+    settings:
+      base:
+        PRODUCT_NAME: SwiftTerm
+        PRODUCT_BUNDLE_IDENTIFIER: com.terminalagents.SwiftTerm
+        GENERATE_INFOPLIST_FILE: YES
+        DEFINES_MODULE: YES
+        SKIP_INSTALL: YES
+        BUILD_LIBRARY_FOR_DISTRIBUTION: NO
+  TerminalAgents:
+    type: application
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: TerminalAgents
+        excludes:
+          - "Info.plist"
+          - "TerminalAgents.entitlements"
+    info:
+      path: TerminalAgents/Info.plist
+      properties:
+        CFBundleDisplayName: Terminal Agents
+        LSMinimumSystemVersion: "14.0"
+        NSPrincipalClass: NSApplication
+        NSHighResolutionCapable: true
+    entitlements:
+      path: TerminalAgents/TerminalAgents.entitlements
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.terminalagents.mac
+        PRODUCT_NAME: TerminalAgents
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+    dependencies:
+      - target: SwiftTerm
+        embed: true
